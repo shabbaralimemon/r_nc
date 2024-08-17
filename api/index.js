@@ -21,22 +21,15 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser(process.env.JWT_SECRET));
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
-});
+app.use(express.static(path.join(__dirname, "/client/dist")));
 
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
-
-app.use(express.static(path.join(__dirname, "/client/dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -46,4 +39,13 @@ app.use((err, req, res, next) => {
     statusCode,
     message,
   });
+});
+
+app.get("*", (req, res) => {
+  res.status(404).send("not found");
+  // res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
+});
+
+app.listen(3000, () => {
+  console.log("Server is running on port 3000");
 });

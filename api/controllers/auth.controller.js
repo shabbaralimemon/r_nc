@@ -2,12 +2,16 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import CustomError from "../error/index.js";
+import { createTokenUser, addResponseCookies } from "../utils/jwt.js";
 
 export const signup = async (req, res, next) => {
-  const { username, email, password } = req.body;
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword });
   try {
+    const { username, email, password } = req.body;
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+    const newUser = new User({ username, email, password: hashedPassword });
+    const tokenUser = createTokenUser(newUser);
+    addResponseCookies({ res, user: tokenUser });
     await newUser.save();
     res.status(201).json("User created successfully");
   } catch (error) {
@@ -16,21 +20,31 @@ export const signup = async (req, res, next) => {
 };
 
 export const signin = async (req, res, next) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
+    if (!email || !password) {
+      throw new CustomError.BadRequestError("Enter email and password");
+    }
     const validUser = await User.findOne({ email });
-    if (!validUser) return next(errorHandler(404, "User not found"));
+    if (!validUser) {
+      throw new CustomError.UnAuthenticatedError("Invalid email or password");
+    }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password);
-    if (!validPassword) return next(errorHandler(401, "Invalid credentials"));
+    if (!validPassword) {
+      throw new CustomError.UnAuthenticatedError("Invalid email or password");
+    }
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
-    const { password: pass, ...rest } = validUser._doc;
+    console.log(validUser);
 
-    res
-      .cookie("access_token", token, { httpOnly: true })
-      .status(200)
-      .json(rest);
+    const tokenUser = createTokenUser(validUser);
+    addResponseCookies({ res, user: tokenUser });
+
+    // const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    // const { password: pass, ...rest } = validUser._doc;
+
+    // redirect to desire URL
+    res.status(200).send("logged in successfully");
   } catch (error) {
     next(error);
   }
@@ -62,7 +76,7 @@ export const google = async (req, res, next) => {
 
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-      const { password:pass, ...rest } = newUser._doc;
+      const { password: pass, ...rest } = newUser._doc;
       res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
@@ -73,9 +87,9 @@ export const google = async (req, res, next) => {
   }
 };
 
-export const signOut = async (req, res, next) => {  
+export const signOut = async (req, res, next) => {
   try {
-    res.clearCookie('access_token');
+    res.clearCookie("access_token");
     res.status(200).json("User has been logged out!");
   } catch (error) {
     next(error);
