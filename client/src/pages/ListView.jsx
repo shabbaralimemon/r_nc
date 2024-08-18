@@ -23,19 +23,13 @@ const ListingView = () => {
       });
   }, []);
 
-  console.log(imageUrls);
-
   return (
     <main>
       <h1>Listings</h1>
-      {imageUrls.map((image, index) => (
-        <img
-          key={index}
-          style={{ maxWidth: "750px" }}
-          src={`${image}`}
-          alt="listing view image"
-        />
-      ))}
+
+      {imageUrls &&
+        imageUrls.map((image) => <img key={image} src={image} alt="" />)}
+
       <div
         style={{
           margin: "14px",

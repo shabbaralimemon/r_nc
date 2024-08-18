@@ -125,14 +125,14 @@ const CreateListing = () => {
       setLoading(true);
       setError(false);
 
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch("http://localhost:3000/api/listing", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           ...formData,
-          userRef: currentUser._id,
         }),
       });
 
@@ -142,7 +142,7 @@ const CreateListing = () => {
         setError(data.message);
         return;
       }
-
+      console.log(data);
       navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
@@ -259,7 +259,9 @@ const CreateListing = () => {
                 value={formData.regularPrice}
               />
               <div className="flex flex-col items-center">
-                <p>Rent/ <i>month</i> </p>
+                <p>
+                  Rent/ <i>month</i>{" "}
+                </p>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -274,7 +276,9 @@ const CreateListing = () => {
                 value={formData.advance}
               />
               <div className="flex flex-col items-center">
-                <p>Advance <i>returnable</i></p>
+                <p>
+                  Advance <i>returnable</i>
+                </p>
               </div>
             </div>
             {formData.offer && (
