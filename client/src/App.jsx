@@ -8,10 +8,10 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
-import Listing from "./pages/Listing";
 import Search from "./pages/Search";
 import Support from "./pages/Support";
 import ListingView from "./pages/ListView";
+import Listings from "./pages/Listing";
 
 const App = () => {
   return (
@@ -23,7 +23,7 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/about" element={<About />} />
         <Route path="/support" element={<Support />} />
-        <Route path="/listing" element={<Listing />} />
+        <Route path="/listings" element={<Listings />} />
         <Route path="/listing/:id" element={<ListingView />} />
         <Route path="/search" element={<Search />} />
         <Route element={<PrivateRoute />}>

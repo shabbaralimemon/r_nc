@@ -17,7 +17,7 @@ import {
 } from "react-icons/fa";
 import Contact from "../components/Contact";
 
-const Listing = () => {
+const Listings = () => {
   SwiperCore.use([Navigation]);
 
   const params = useParams();
@@ -169,4 +169,4 @@ const Listing = () => {
   );
 };
 
-export default Listing;
+export default Listings;
