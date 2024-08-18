@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
 import listingRouter from "./routes/listing.route.js";
 import path from "path";
+import cors from "cors";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
+app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser(process.env.JWT_SECRET));
