@@ -47,6 +47,15 @@ export const updateListing = async (req, res, next) => {
   }
 };
 
+export const getListingsByUser = async (req, res) => {
+  try {
+    const listing = await Listing.find({ userRef: req.user.userId });
+    res.status(200).json(listing);
+  } catch (error) {
+    res.status(404).send("you don't have any listing yet!");
+  }
+};
+
 export const getListing = async (req, res, next) => {
   try {
     const listing = await Listing.findById(req.params.id);

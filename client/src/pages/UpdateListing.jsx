@@ -54,7 +54,6 @@ const UpdateListing = () => {
     };
 
     fetchListing();
-
   }, [params.listingId]);
 
   const handleImageSubmit = (e) => {
@@ -130,7 +129,7 @@ const UpdateListing = () => {
   const handleTypeChange = (type) => {
     setFormData({
       ...formData,
-      type: formData.type === type ? "" : type
+      type: formData.type === type ? "" : type,
     });
   };
 
@@ -146,16 +145,19 @@ const UpdateListing = () => {
       setLoading(true);
       setError(false);
 
-      const res = await fetch(`/api/listing/update/${params.listingId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          userRef: currentUser._id,
-        }),
-      });
+      const res = await fetch(
+        `http://localhost:3000/api/listing/${params.listingId}`,
+        {
+          method: "PATCH",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...formData,
+          }),
+        }
+      );
 
       const data = await res.json();
       setLoading(false);
@@ -312,9 +314,7 @@ const UpdateListing = () => {
         </div>
 
         <div className="flex flex-col flex-1 gap-4">
-          <p className="font-semibold">
-            Pricing and Details
-          </p>
+          <p className="font-semibold">Pricing and Details</p>
           <div className="flex flex-wrap gap-6">
             <div className="flex items-center gap-2">
               <input
@@ -369,7 +369,9 @@ const UpdateListing = () => {
                 value={formData.advance}
               />
               <div className="flex flex-col items-center">
-                <p>Advance (PKR) <i>returnable</i></p>
+                <p>
+                  Advance (PKR) <i>returnable</i>
+                </p>
               </div>
             </div>
             {formData.offer && (

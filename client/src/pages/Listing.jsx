@@ -40,28 +40,35 @@ const Listings = () => {
       });
   }, []);
 
-  console.log(listings);
-
   return (
-    <main>
+    <main className="max-w-screen-sm mx-auto">
       <h1>Listings</h1>
       {listings.map((listing) => (
         <a
           href={`/listing/${listing._id}`}
           key={listing._id}
+          className="flex"
           style={{
-            margin: "14px",
-            border: "1px solid gainsboro",
-            maxWidth: "480px",
+            margin: "14px 0",
+            border: "2px solid gainsboro",
             padding: "20px",
-            display: "block",
+            borderRadius: "0.4em",
           }}
         >
-          <h4>name: {listing.name}</h4>
-          <p>address: {listing.address}</p>
-          <p>description: {listing.description}</p>
-          <p>bedrooms: {listing.bedroom}</p>
-          <p>furnished: {listing.furnished}</p>
+          <div className="mr-8 min-w-40 min-h-32 max-w-40 max-h-32">
+            <img
+              src={listing.imageUrls[0]}
+              alt=""
+              className="max-w-full max-h-full"
+            />
+          </div>
+          <div>
+            <h4>name: {listing.name}</h4>
+            <p>address: {listing.address}</p>
+            <p>description: {listing.description}</p>
+            <p>bedrooms: {listing.bedroom}</p>
+            <p>furnished: {listing.furnished}</p>
+          </div>
         </a>
       ))}
     </main>

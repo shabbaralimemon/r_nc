@@ -24,26 +24,29 @@ const ListingView = () => {
   }, []);
 
   return (
-    <main>
+    <main className="max-w-screen-sm mx-auto ">
       <h1>Listings</h1>
 
       {imageUrls &&
-        imageUrls.map((image) => <img key={image} src={image} alt="" />)}
+        imageUrls.map((image) => (
+          <img className="w-full max-h-96" key={image} src={image} alt="" />
+        ))}
 
       <div
         style={{
-          margin: "14px",
-          border: "1px solid gainsboro",
-          maxWidth: "480px",
+          margin: "14px 0",
+          border: "2px solid gainsboro",
           padding: "20px",
           display: "block",
+          borderRadius: "0.4em",
+          lineHeight: "2.5em",
         }}
       >
-        <h4>name: {listing.name}</h4>
+        <h4 className="text-4xl">{listing.name}</h4>
         <p>address: {listing.address}</p>
         <p>description: {listing.description}</p>
-        <p>bedrooms: {listing.bedroom}</p>
-        <p>furnished: {listing.furnished}</p>
+        <p>bedrooms: {listing.bedrooms}</p>
+        <p>furnished: {listing.furnished ? "Yes" : "No"}</p>
       </div>
     </main>
   );

@@ -6,6 +6,7 @@ import {
   updateListing,
   getListing,
   getListings,
+  getListingsByUser,
 } from "../controllers/listing.controller.js";
 import {
   authenticateUser,
@@ -19,7 +20,7 @@ const router = express.Router();
 // router.patch("/update/:id", updateListing);
 // router.get("/:id", getListing); // get removed no need
 // router.get("/", getListings); // get removed, no need
-
+router.get("/mylistings", authenticateUser, getListingsByUser);
 router.get("/:id", getListing);
 router.route("/").get(getListings).post(authenticateUser, createListing);
 router
